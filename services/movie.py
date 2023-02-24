@@ -1,7 +1,6 @@
 
-from models.movie import Movie
 from schemas.movie import Movie
-from fastapi.responses import HTMLResponse,JSONResponse
+
 from models.movie import Movie as Movie_Model
 
 
@@ -12,16 +11,16 @@ class MovieService(object):
 
     
     def get_movies(self):
-         result= self.db.query(Movie).all()
+         result= self.db.query(Movie_Model).all()
          return result
      
     def get_movie(self,id):
-         result= self.db.query(Movie).filter(Movie.id==id).first()
+         result= self.db.query(Movie_Model).filter(Movie_Model.id==id).first()
          
          return result
     
     def get_movie_category(self,category):
-        result= self.db.query(Movie).filter(Movie.category==category).all()
+        result= self.db.query(Movie_Model).filter(Movie_Model.category==category).all()
         return result
     
     def create_movie(self,movie:Movie):
@@ -41,7 +40,10 @@ class MovieService(object):
         movie.category=data.category
         self.db.commit()
         return 
-
+    def delete_movie(self, id: int):
+        result = self.db.query(Movie_Model).filter(Movie_Model.id == id).first()
+        self.db.delete(result)
+        self.db.commit()
 
 
 
